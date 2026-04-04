@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lounge Chair — Room Tone</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/colorway.js"></script>
+</head>
+<body>
+
+  <button class="hamburger" aria-label="Toggle navigation">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <div class="page-wrapper">
+
+    <aside class="sidebar">
+      <a href="index.html" class="sidebar-logo">
+        <img src="Logo/Logo.png" alt="Room Tone" class="sidebar-logo-img logo-img">
+      </a>
+      <nav class="sidebar-nav">
+        <a href="shop.html" class="sidebar-nav-main active">SHOP</a>
+        <ul class="category-filters">
+          <li><a href="shop.html?cat=all"      class="cat-filter" data-cat="all">all</a></li>
+          <li><a href="shop.html?cat=tables"   class="cat-filter" data-cat="tables">tables</a></li>
+          <li><a href="shop.html?cat=seating"  class="cat-filter" data-cat="seating">seating</a></li>
+          <li><a href="shop.html?cat=lighting" class="cat-filter" data-cat="lighting">lighting</a></li>
+          <li><a href="shop.html?cat=storage"  class="cat-filter" data-cat="storage">storage</a></li>
+          <li><a href="shop.html?cat=textiles" class="cat-filter" data-cat="textiles">textiles</a></li>
+          <li><a href="shop.html?cat=art"      class="cat-filter" data-cat="art">art + mirrors</a></li>
+          <li><a href="shop.html?cat=objects"  class="cat-filter" data-cat="objects">objects</a></li>
+        </ul>
+        <a href="contact.html" class="sidebar-nav-main">CONTACT</a>
+        <a href="about.html"   class="sidebar-nav-main">ABOUT</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+
+      <article class="product-detail">
+
+        <!-- Image carousel -->
+        <div class="product-images-col">
+          <div class="carousel-wrapper">
+            <img
+              id="carousel-main"
+              src="Items/lounge%20chair%201.webp"
+              alt="lounge chair"
+              class="carousel-main"
+            >
+            <button id="carousel-prev" class="carousel-btn prev" aria-label="Previous image">&lsaquo;</button>
+            <button id="carousel-next" class="carousel-btn next" aria-label="Next image">&rsaquo;</button>
+          </div>
+
+          <div class="carousel-thumbs">
+            <img src="Items/lounge%20chair%201.webp" alt="lounge chair view 1" class="carousel-thumb active">
+            <img src="Items/lounge%20chair%202.webp" alt="lounge chair view 2" class="carousel-thumb">
+            <img src="Items/lounge%20chair%203.webp" alt="lounge chair view 3" class="carousel-thumb">
+            <img src="Items/lounge%20chair%204.webp" alt="lounge chair view 4" class="carousel-thumb">
+            <img src="Items/lounge%20chair%205.webp" alt="lounge chair view 5" class="carousel-thumb">
+            <img src="Items/lounge%20chair%206.webp" alt="lounge chair view 6" class="carousel-thumb">
+          </div>
+        </div>
+
+        <!-- Product info -->
+        <div class="product-info-col">
+          <p class="product-name-price">lounge chair &nbsp; $1500</p>
+
+          <div class="product-section">
+            <p class="product-section-label">description</p>
+            <p class="product-section-text">
+              Mid-century lounge chair in warm caramel leather over a solid walnut frame.
+              Designed in the Scandinavian tradition, this chair combines generous proportions
+              with refined joinery. Original leather shows a beautiful patina with minimal wear.
+              Made in Denmark, circa 1960s.
+            </p>
+          </div>
+
+          <div class="product-section">
+            <p class="product-section-label">dimensions</p>
+            <p class="product-section-text">
+              (Chair) H 39.5&Prime; &times; W 25&Prime; &times; D 30.5&Prime; &times; Sh 15.5&Prime;
+            </p>
+          </div>
+
+          <div class="product-section">
+            <p class="product-section-label">condition</p>
+            <p class="product-section-text">
+              Very good vintage condition. Original leather retains its suppleness with light
+              surface creasing consistent with age. Frame is solid with no repairs or
+              structural concerns. All original hardware intact.
+            </p>
+          </div>
+
+          <p class="product-purchase">
+            email <a href="mailto:room.tone.shop@gmail.com">room.tone.shop@gmail.com</a> to purchase
+          </p>
+        </div>
+
+      </article>
+
+    </main>
+
+  </div>
+
+  <script src="js/carousel.js"></script>
+  <script src="js/nav.js"></script>
+
+</body>
+</html>

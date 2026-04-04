@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop — Room Tone</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/colorway.js"></script>
+</head>
+<body>
+
+  <button class="hamburger" aria-label="Toggle navigation">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <div class="page-wrapper">
+
+    <aside class="sidebar">
+      <a href="index.html" class="sidebar-logo">
+        <img src="Logo/Logo.png" alt="Room Tone" class="sidebar-logo-img logo-img">
+      </a>
+      <nav class="sidebar-nav">
+        <a href="shop.html" class="sidebar-nav-main active">SHOP</a>
+        <ul class="category-filters">
+          <li><a href="shop.html?cat=all"      class="cat-filter" data-cat="all">all</a></li>
+          <li><a href="shop.html?cat=tables"   class="cat-filter" data-cat="tables">tables</a></li>
+          <li><a href="shop.html?cat=seating"  class="cat-filter" data-cat="seating">seating</a></li>
+          <li><a href="shop.html?cat=lighting" class="cat-filter" data-cat="lighting">lighting</a></li>
+          <li><a href="shop.html?cat=storage"  class="cat-filter" data-cat="storage">storage</a></li>
+          <li><a href="shop.html?cat=textiles" class="cat-filter" data-cat="textiles">textiles</a></li>
+          <li><a href="shop.html?cat=art"      class="cat-filter" data-cat="art">art + mirrors</a></li>
+          <li><a href="shop.html?cat=objects"  class="cat-filter" data-cat="objects">objects</a></li>
+        </ul>
+        <a href="contact.html" class="sidebar-nav-main">CONTACT</a>
+        <a href="about.html"   class="sidebar-nav-main">ABOUT</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <span class="page-title">shop</span>
+
+      <section class="product-grid" id="product-grid">
+
+        <a href="product.html" class="product-card" data-category="tables">
+          <img src="Items/coffee%20table.png" alt="coffee table" class="product-img">
+          <p class="product-info">coffee table &nbsp; $1200</p>
+        </a>
+
+        <a href="product.html" class="product-card" data-category="lighting">
+          <img src="Items/floor%20lamp.png" alt="floor lamp" class="product-img">
+          <p class="product-info">floor lamp &nbsp; $3000</p>
+        </a>
+
+        <a href="product.html" class="product-card" data-category="seating">
+          <img src="Items/daybed.png" alt="daybed" class="product-img">
+          <p class="product-info">daybed &nbsp; $1300</p>
+        </a>
+
+        <a href="product.html" class="product-card" data-category="lighting">
+          <img src="Items/pendant%20lamp.png" alt="pendant lamp" class="product-img">
+          <p class="product-info">pendant lamp &nbsp; $70</p>
+        </a>
+
+        <a href="product.html" class="product-card" data-category="seating">
+          <img src="Items/red%20chairs.png" alt="chairs" class="product-img">
+          <p class="product-info">chairs &nbsp; $1000</p>
+        </a>
+
+        <a href="product.html" class="product-card" data-category="seating">
+          <img src="Items/lounge%20chair.png" alt="lounge chair" class="product-img">
+          <p class="product-info">lounge chair &nbsp; $1500</p>
+        </a>
+
+        <a href="product.html" class="product-card" data-category="textiles">
+          <img src="Items/blanket.png" alt="blanket" class="product-img">
+          <p class="product-info">blanket &nbsp; $200</p>
+        </a>
+
+        <a href="product.html" class="product-card" data-category="storage">
+          <img src="Items/bookshelf.png" alt="bookshelf" class="product-img">
+          <p class="product-info">bookshelf &nbsp; $800</p>
+        </a>
+
+        <a href="product.html" class="product-card" data-category="textiles">
+          <img src="Items/quilt.png" alt="quilt" class="product-img">
+          <p class="product-info">quilt &nbsp; $350</p>
+        </a>
+
+        <a href="product.html" class="product-card" data-category="lighting">
+          <img src="Items/lamps.png" alt="lamps" class="product-img">
+          <p class="product-info">lamps &nbsp; $600</p>
+        </a>
+
+        <a href="product.html" class="product-card" data-category="art">
+          <img src="Items/painting.jpg" alt="painting" class="product-img">
+          <p class="product-info">painting &nbsp; $450</p>
+        </a>
+
+        <a href="product.html" class="product-card" data-category="objects">
+          <img src="Items/doll.png" alt="doll" class="product-img">
+          <p class="product-info">doll &nbsp; $85</p>
+        </a>
+
+      </section>
+    </main>
+
+  </div>
+
+  <script>
+    // Category filtering
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var cat = params.get('cat') || 'all';
+
+      // Highlight active filter
+      document.querySelectorAll('.cat-filter').forEach(function (link) {
+        var linkCat = link.dataset.cat || 'all';
+        link.classList.toggle('active', linkCat === cat);
+      });
+
+      // Show / hide products
+      if (cat !== 'all') {
+        document.querySelectorAll('.product-card').forEach(function (card) {
+          card.style.display = (card.dataset.category === cat) ? 'block' : 'none';
+        });
+      }
+    })();
+  </script>
+  <script src="js/nav.js"></script>
+
+</body>
+</html>
