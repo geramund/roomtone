@@ -5,20 +5,20 @@
 
 (function () {
   var colorways = [
-    { text: '#1a1a1a', bg: '#f5f0e1' },   // default: near-black on cream
-    { text: '#a74e3c', bg: '#dfbbb8' },   // terracotta on tan
-    { text: '#693332', bg: '#35336c' },   // maroon on deep blue
-    { text: '#7d7b74', bg: '#d1c693' },   // warm gray on khaki
-    { text: '#b79b6c', bg: '#9b513b' },   // gold on rust
-    { text: '#90382b', bg: '#af835c' },   // dark red on camel
-    { text: '#7d693e', bg: '#b48e7e' },   // olive on dusty rose
-    { text: '#cd402a', bg: '#d48379' },   // red on salmon
-    { text: '#48221c', bg: '#9f716e' },   // dark brown on mauve
-    { text: '#be8c8b', bg: '#633b34' },   // pink on dark brown
-    { text: '#39476d', bg: '#9fa290' },   // navy on sage
-    { text: '#29365b', bg: '#51493e' },   // navy on dark olive
-    { text: '#5d4c31', bg: '#373c53' },   // brown on slate
-    { text: '#5c2729', bg: '#313067' },   // wine on indigo
+    '#f5f0e1',   // cream (default)
+    '#dfbbb8',   // tan
+    '#35336c',   // deep blue
+    '#d1c693',   // khaki
+    '#9b513b',   // rust
+    '#af835c',   // camel
+    '#b48e7e',   // dusty rose
+    '#d48379',   // salmon
+    '#9f716e',   // mauve
+    '#633b34',   // dark brown
+    '#9fa290',   // sage
+    '#51493e',   // dark olive
+    '#373c53',   // slate
+    '#313067',   // indigo
   ];
 
   var STORAGE_KEY = 'roomtone-colorway-idx';
@@ -33,22 +33,20 @@
     return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
   }
 
-  function applyColors(colorway) {
+  function applyColors(bg, text) {
     var root = document.documentElement;
-    root.style.setProperty('--color-text', colorway.text);
-    root.style.setProperty('--color-bg', colorway.bg);
-    // Apply directly to html + body to prevent any flash
-    root.style.backgroundColor = colorway.bg;
-    root.style.color = colorway.text;
+    root.style.setProperty('--color-bg', bg);
+    root.style.setProperty('--color-text', text);
+    root.style.backgroundColor = bg;
+    root.style.color = text;
     if (document.body) {
-      document.body.style.backgroundColor = colorway.bg;
-      document.body.style.color = colorway.text;
+      document.body.style.backgroundColor = bg;
+      document.body.style.color = text;
     }
   }
 
-  function applyLogoFilter(colorway) {
-    var luminance = getLuminance(colorway.bg);
-    var filter = luminance < 0.22 ? 'invert(1)' : '';
+  function applyLogoFilter(luminance) {
+    var filter = luminance < 0.35 ? 'invert(1)' : '';
     document.querySelectorAll('.logo-img').forEach(function (img) {
       img.style.filter = filter;
     });
@@ -62,17 +60,19 @@
     sessionStorage.setItem(STORAGE_KEY, String(idx));
   }
 
-  var chosen = colorways[idx];
+  var bg = colorways[idx];
+  var luminance = getLuminance(bg);
+  var text = luminance < 0.35 ? '#f5f0e1' : '#1a1a1a';
 
   // Apply colors immediately (runs in <head>, prevents FOUC)
-  applyColors(chosen);
+  applyColors(bg, text);
 
   // Apply logo filter after DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {
-      applyLogoFilter(chosen);
+      applyLogoFilter(luminance);
     });
   } else {
-    applyLogoFilter(chosen);
+    applyLogoFilter(luminance);
   }
 })();
