@@ -111,7 +111,7 @@ button {
 }
 
 .home-logo-img {
-  width: min(500px, 42vw);
+  width: min(500px, 52vw);
   height: auto;
 }
 
@@ -160,7 +160,7 @@ button {
 }
 
 .sidebar-logo-img {
-  width: 130px;
+  width: 230px;
   height: auto;
 }
 
@@ -198,7 +198,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
-  margin: 0.3rem 0 1.4rem;
+  margin: 0.3rem 0 1.4rem; /*fix this for weird space*/
   padding-left: 0.05rem;
   overflow: hidden;
   max-height: 400px;
@@ -276,6 +276,7 @@ button {
   width: 100%;
   height: 260px;
   object-fit: contain;
+  align-items: left;
   transition: opacity 0.22s ease;
 }
 
