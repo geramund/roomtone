@@ -8,6 +8,7 @@ analytics?
 HOME
 Home page should scroll
 Resizing when page is fully expanded 
+Make logo different color on home but just cream and black when enter site
 
 SHOP/ABOUT/CONTACT
 When on the Shop page, the categories do not need to collapse. They should only disappear when on on about or contact
@@ -16,9 +17,7 @@ Remove the title from body of each page – (doesnt need to say shop on the shop
 “Shop” is spaced higher than contact and about)
 
 SHOP
-Can the product name and price live within the same container as the image?
-
-
+Can the product name and price live within the same container as the image? switch images to left aligned
 
 ABOUT
 Easy form insert that can just email me directly from the page?
