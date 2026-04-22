@@ -38,91 +38,60 @@
     </aside>
 
     <main class="main-content">
-      <section class="product-grid" id="product-grid">
-
-        <a href="product.html" class="product-card" data-category="tables">
-          <img src="Items/coffee%20table.png" alt="coffee table" class="product-img">
-          <p class="product-info">coffee table &nbsp; $1200</p>
-        </a>
-
-        <a href="product.html" class="product-card" data-category="lighting">
-          <img src="Items/floor%20lamp.png" alt="floor lamp" class="product-img">
-          <p class="product-info">floor lamp &nbsp; $3000</p>
-        </a>
-
-        <a href="product.html" class="product-card" data-category="seating">
-          <img src="Items/daybed.png" alt="daybed" class="product-img">
-          <p class="product-info">daybed &nbsp; $1300</p>
-        </a>
-
-        <a href="product.html" class="product-card" data-category="lighting">
-          <img src="Items/pendant%20lamp.png" alt="pendant lamp" class="product-img">
-          <p class="product-info">pendant lamp &nbsp; $70</p>
-        </a>
-
-        <a href="product.html" class="product-card" data-category="seating">
-          <img src="Items/red%20chairs.png" alt="chairs" class="product-img">
-          <p class="product-info">chairs &nbsp; $1000</p>
-        </a>
-
-        <a href="product.html" class="product-card" data-category="seating">
-          <img src="Items/lounge%20chair.png" alt="lounge chair" class="product-img">
-          <p class="product-info">lounge chair &nbsp; $1500</p>
-        </a>
-
-        <a href="product.html" class="product-card" data-category="textiles">
-          <img src="Items/blanket.png" alt="blanket" class="product-img">
-          <p class="product-info">blanket &nbsp; $200</p>
-        </a>
-
-        <a href="product.html" class="product-card" data-category="storage">
-          <img src="Items/bookshelf.png" alt="bookshelf" class="product-img">
-          <p class="product-info">bookshelf &nbsp; $800</p>
-        </a>
-
-        <a href="product.html" class="product-card" data-category="textiles">
-          <img src="Items/quilt.png" alt="quilt" class="product-img">
-          <p class="product-info">quilt &nbsp; $350</p>
-        </a>
-
-        <a href="product.html" class="product-card" data-category="lighting">
-          <img src="Items/lamps.png" alt="lamps" class="product-img">
-          <p class="product-info">lamps &nbsp; $600</p>
-        </a>
-
-        <a href="product.html" class="product-card" data-category="art">
-          <img src="Items/painting.jpg" alt="painting" class="product-img">
-          <p class="product-info">painting &nbsp; $450</p>
-        </a>
-
-        <a href="product.html" class="product-card" data-category="objects">
-          <img src="Items/doll.png" alt="doll" class="product-img">
-          <p class="product-info">doll &nbsp; $85</p>
-        </a>
-
-      </section>
+      <section class="product-grid" id="product-grid"></section>
     </main>
 
   </div>
 
+  <script src="js/sheets.js"></script>
   <script>
-    // Category filtering
     (function () {
       var params = new URLSearchParams(window.location.search);
       var cat = params.get('cat') || 'all';
 
-      // Highlight active filter
+      /* Highlight active category filter link */
       document.querySelectorAll('.cat-filter').forEach(function (link) {
-        var linkCat = link.dataset.cat || 'all';
-        link.classList.toggle('active', linkCat === cat);
+        link.classList.toggle('active', (link.dataset.cat || 'all') === cat);
       });
 
-      // Show / hide products
-      if (cat !== 'all') {
-        document.querySelectorAll('.product-card').forEach(function (card) {
-          card.style.display = (card.dataset.category === cat) ? 'block' : 'none';
+      var grid = document.getElementById('product-grid');
+      grid.innerHTML = '<p style="font-style:italic;font-family:inherit;font-size:0.82rem;opacity:0.6;padding:0.25rem 0">loading\u2026</p>';
+
+      RoomToneSheets.fetchProducts()
+        .then(function (products) {
+          var filtered = (cat === 'all')
+            ? products
+            : products.filter(function (p) { return p.type === cat; });
+
+          if (filtered.length === 0) {
+            grid.innerHTML = '<p style="font-family:inherit;font-size:0.82rem;opacity:0.6">no items found.</p>';
+            return;
+          }
+
+          grid.innerHTML = '';
+          filtered.forEach(function (product) {
+            var a = document.createElement('a');
+            a.href = 'product.html?item=' + encodeURIComponent(product.slug);
+            a.className = 'product-card';
+            a.dataset.category = product.type;
+
+            var img = document.createElement('img');
+            img.alt = product.name;
+            img.className = 'product-img';
+            RoomToneSheets.tryImage(img, product.thumbnail);
+
+            var info = document.createElement('p');
+            info.className = 'product-info';
+            info.innerHTML = product.name.toLowerCase() + ' &nbsp; $' + Number(product.price).toLocaleString();
+
+            a.appendChild(img);
+            a.appendChild(info);
+            grid.appendChild(a);
+          });
+        })
+        .catch(function () {
+          grid.innerHTML = '<p style="font-family:inherit;font-size:0.82rem;opacity:0.6">could not load products. please try again.</p>';
         });
-      }
     })();
   </script>
   <script src="js/nav.js"></script>

@@ -37,71 +37,154 @@
       </nav>
     </aside>
 
-    <main class="main-content">
-
-      <article class="product-detail">
-
-        <!-- Image carousel -->
-        <div class="product-images-col">
-          <div class="carousel-wrapper">
-            <img
-              id="carousel-main"
-              src="Items/lounge%20chair%201.webp"
-              alt="lounge chair"
-              class="carousel-main"
-            >
-            <button id="carousel-prev" class="carousel-btn prev" aria-label="Previous image">&lsaquo;</button>
-            <button id="carousel-next" class="carousel-btn next" aria-label="Next image">&rsaquo;</button>
-          </div>
-
-          <div class="carousel-thumbs">
-            <img src="Items/lounge%20chair%201.webp" alt="lounge chair view 1" class="carousel-thumb active">
-            <img src="Items/lounge%20chair%202.webp" alt="lounge chair view 2" class="carousel-thumb">
-            <img src="Items/lounge%20chair%203.webp" alt="lounge chair view 3" class="carousel-thumb">
-            <img src="Items/lounge%20chair%204.webp" alt="lounge chair view 4" class="carousel-thumb">
-            <img src="Items/lounge%20chair%205.webp" alt="lounge chair view 5" class="carousel-thumb">
-            <img src="Items/lounge%20chair%206.webp" alt="lounge chair view 6" class="carousel-thumb">
-          </div>
-        </div>
-
-        <!-- Product info -->
-        <div class="product-info-col">
-          <p class="product-name-price">lounge chair &nbsp; $1500</p>
-
-          <div class="product-section">
-            <p class="product-section-label">description</p>
-            <p class="product-section-text">
-              Beech bentwood frame with webbing upholstery. Together with matching ottoman. Denmark, circa 1970s.
-            </p>
-          </div>
-
-          <div class="product-section">
-            <p class="product-section-label">dimensions</p>
-            <p class="product-section-text">
-              (Chair) H 39.5&Prime; &times; W 25&Prime; &times; D 30.5&Prime; &times; Sh 15.5&Prime;
-              <br> (Ottoman) H 15&Prime; &times; W 17.75&Prime; &times; D 20.75&Prime; &times; Sh 15.5&Prime;
-            </p>
-          </div>
-
-          <div class="product-section">
-            <p class="product-section-label">condition</p>
-            <p class="product-section-text">
-              Wear consistent with age and use including dings and rubs to armrest and legs. Head cushion straps are torn. Marks and discoloration to upholstery. G102
-            </p>
-          </div>
-
-          <p class="product-purchase">
-            email <a href="mailto:room.tone.shop@gmail.com">room.tone.shop@gmail.com</a> to purchase
-          </p>
-        </div>
-
-      </article>
-
-    </main>
+    <main class="main-content"></main>
 
   </div>
 
-  <script src="js/carousel.js"></script>
+  <script src="js/sheets.js"></script>
+  <script>
+    (function () {
+      function esc(s) {
+        return String(s)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      var params = new URLSearchParams(window.location.search);
+      var slug   = params.get('item');
+      if (!slug) { window.location.href = 'shop.html'; return; }
+
+      var main = document.querySelector('.main-content');
+      main.innerHTML = '<p style="font-style:italic;font-family:inherit;font-size:0.82rem;opacity:0.6;padding:0.25rem 0">loading\u2026</p>';
+
+      RoomToneSheets.fetchProductBySlug(slug)
+        .then(function (product) {
+          if (!product) {
+            main.innerHTML = '<p style="font-family:inherit;font-size:0.82rem;">item not found.</p>';
+            return;
+          }
+
+          document.title = product.name + ' \u2014 Room Tone';
+          /* images[] holds carousel base paths; thumbnail is the shop-grid image.
+             If there are no carousel images, fall back to showing the thumbnail. */
+          var hasCarousel = product.images.length > 0;
+          var hasMultiple = product.images.length > 1;
+          var firstBase   = hasCarousel ? product.images[0] : product.thumbnail;
+          main.innerHTML  = '';
+
+          /* ---- article ---- */
+          var article = document.createElement('article');
+          article.className = 'product-detail';
+
+          /* -- images column -- */
+          var imagesCol = document.createElement('div');
+          imagesCol.className = 'product-images-col';
+
+          var wrapper = document.createElement('div');
+          wrapper.className = 'carousel-wrapper';
+
+          var mainImg = document.createElement('img');
+          mainImg.id = 'carousel-main';
+          mainImg.alt = product.name;
+          mainImg.className = 'carousel-main';
+          RoomToneSheets.tryImage(mainImg, firstBase);
+          wrapper.appendChild(mainImg);
+
+          if (hasMultiple) {
+            var prevBtn = document.createElement('button');
+            prevBtn.id = 'carousel-prev';
+            prevBtn.className = 'carousel-btn prev';
+            prevBtn.setAttribute('aria-label', 'Previous image');
+            prevBtn.innerHTML = '&lsaquo;';
+
+            var nextBtn = document.createElement('button');
+            nextBtn.id = 'carousel-next';
+            nextBtn.className = 'carousel-btn next';
+            nextBtn.setAttribute('aria-label', 'Next image');
+            nextBtn.innerHTML = '&rsaquo;';
+
+            wrapper.appendChild(prevBtn);
+            wrapper.appendChild(nextBtn);
+          }
+          imagesCol.appendChild(wrapper);
+
+          if (hasMultiple) {
+            var thumbsDiv = document.createElement('div');
+            thumbsDiv.className = 'carousel-thumbs';
+            product.images.forEach(function (base, i) {
+              var thumb = document.createElement('img');
+              thumb.alt = product.name + ' view ' + (i + 1);
+              thumb.className = 'carousel-thumb' + (i === 0 ? ' active' : '');
+              RoomToneSheets.tryImage(thumb, base);
+              thumbsDiv.appendChild(thumb);
+            });
+            imagesCol.appendChild(thumbsDiv);
+          }
+          article.appendChild(imagesCol);
+
+          /* -- info column -- */
+          var infoCol = document.createElement('div');
+          infoCol.className = 'product-info-col';
+
+          var namePrice = document.createElement('p');
+          namePrice.className = 'product-name-price';
+          namePrice.innerHTML = esc(product.name.toLowerCase()) +
+            ' &nbsp; $' + Number(product.price).toLocaleString();
+          infoCol.appendChild(namePrice);
+
+          [
+            { label: 'description', value: product.description },
+            { label: 'dimensions',  value: product.dimensions  },
+            { label: 'condition',   value: product.condition   }
+          ].forEach(function (s) {
+            if (!s.value) return;
+            var div   = document.createElement('div');
+            div.className = 'product-section';
+            var lbl   = document.createElement('p');
+            lbl.className = 'product-section-label';
+            lbl.textContent = s.label;
+            var txt   = document.createElement('p');
+            txt.className = 'product-section-text';
+            txt.textContent = s.value;
+            div.appendChild(lbl);
+            div.appendChild(txt);
+            infoCol.appendChild(div);
+          });
+
+          var purchase = document.createElement('p');
+          purchase.className = 'product-purchase';
+          purchase.innerHTML = 'email <a href="mailto:room.tone.shop@gmail.com">room.tone.shop@gmail.com</a> to purchase';
+          infoCol.appendChild(purchase);
+
+          article.appendChild(infoCol);
+          main.appendChild(article);
+
+          /* ---- carousel logic ---- */
+          if (hasMultiple) {
+            var images   = product.images;
+            var current  = 0;
+            var thumbEls = document.querySelectorAll('.carousel-thumb');
+
+            function goTo(idx) {
+              current = (idx + images.length) % images.length;
+              RoomToneSheets.tryImage(mainImg, images[current]);
+              thumbEls.forEach(function (t, i) {
+                t.classList.toggle('active', i === current);
+              });
+            }
+
+            document.getElementById('carousel-prev').addEventListener('click', function () { goTo(current - 1); });
+            document.getElementById('carousel-next').addEventListener('click', function () { goTo(current + 1); });
+            thumbEls.forEach(function (thumb, i) {
+              thumb.addEventListener('click', function () { goTo(i); });
+            });
+          }
+        })
+        .catch(function () {
+          main.innerHTML = '<p style="font-family:inherit;font-size:0.82rem;opacity:0.6">could not load item. please try again.</p>';
+        });
+    })();
+  </script>
   <script src="js/nav.js"></script>
 
 </body>
