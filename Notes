@@ -6,7 +6,7 @@ Changing colorways should only happen on the home page, the background for the r
 analytics?
 
 HOME
-Home page should scroll
+Home page should scroll and bounce on apple
 Resizing when page is fully expanded 
 Make logo different color on home but just cream and black when enter site
 
@@ -15,7 +15,7 @@ When on the Shop page, the categories do not need to collapse. They should only 
 Fix bug where categories appear when clicking on contact
 Logo should be larger. Maybe it scales if the page increases in width.
 Remove the title from body of each page – (doesnt need to say shop on the shop page)
-“Shop” is spaced higher than contact and about)
+“Shop” is spaced higher than contact and about, fix the spacing so even
 
 SHOP
 Can the product name and price live within the same container as the image? switch images to left aligned
@@ -24,4 +24,4 @@ ABOUT
 Easy form insert that can just email me directly from the page?
 
 PRODUCT PAGE
-Can the clickable area to go to the next image be larger? Not just the immediate area of the > arrow
+Can the clickable area to go to the next image be larger? Not just the immediate area of the > arrow. should be half and half about the image

@@ -4,6 +4,11 @@
    ============================================================= */
 
 (function () {
+  // Only apply colorway on the home page
+  var path = window.location.pathname;
+  var isHome = path === '/' || path.endsWith('/index.html') || path.endsWith('\\index.html');
+  if (!isHome) return;
+
   var colorways = [
     '#f5f0e1',   // cream (default)
     '#dfbbb8',   // tan

@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About — Room Tone</title>
   <link rel="stylesheet" href="css/style.css">
-  <script src="js/colorway.js"></script>
 </head>
 <body>
 
@@ -39,10 +38,44 @@
     </aside>
 
     <main class="main-content">
-      <span class="page-title">about</span>
       <p class="about-text">
         Room Tone is a shop based in Troy, NY. We stock vintage furniture and home goods.
       </p>
+
+      <form class="contact-form" id="contact-form">
+        <div class="form-field">
+          <label for="form-name">name</label>
+          <input type="text" id="form-name" name="name" required>
+        </div>
+        <div class="form-field">
+          <label for="form-email">email</label>
+          <input type="email" id="form-email" name="email" required>
+        </div>
+        <div class="form-field">
+          <label for="form-msg">message</label>
+          <textarea id="form-msg" name="message" rows="5" required></textarea>
+        </div>
+        <div class="form-footer">
+          <button type="submit" class="form-submit">send</button>
+          <span class="form-confirm" id="form-confirm" aria-live="polite"></span>
+        </div>
+      </form>
+
+      <script>
+        document.getElementById('contact-form').addEventListener('submit', function (e) {
+          e.preventDefault();
+          var name    = document.getElementById('form-name').value;
+          var email   = document.getElementById('form-email').value;
+          var message = document.getElementById('form-msg').value;
+          var body    = 'name: ' + name + '\nemail: ' + email + '\n\n' + message;
+          window.location.href =
+            'mailto:room.tone.shop@gmail.com' +
+            '?subject=' + encodeURIComponent('Room Tone Inquiry') +
+            '&body='    + encodeURIComponent(body);
+          this.reset();
+          document.getElementById('form-confirm').textContent = 'email client opened.';
+        });
+      </script>
     </main>
 
   </div>

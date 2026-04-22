@@ -29,7 +29,7 @@
   --color-bg: #f5f0e1;
   --color-text: #1a1a1a;
   --color-accent: #2400ff;
-  --sidebar-width: 210px;
+  --sidebar-width: 250px;
   --font-heading: 'Avant Garde', 'Century Gothic', 'Futura', 'Arial Black', sans-serif;
   --font-body: 'Adobe Clean', 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
 }
@@ -81,7 +81,6 @@ button {
   justify-content: center;
   min-height: 100vh;
   position: relative;
-  overflow: hidden;
 }
 
 .home-nav {
@@ -160,7 +159,7 @@ button {
 }
 
 .sidebar-logo-img {
-  width: 230px;
+  width: 100%;
   height: auto;
 }
 
@@ -198,16 +197,17 @@ button {
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
-  margin: 0.3rem 0 1.4rem; /*fix this for weird space*/
+  margin: 0.3rem 0 0.75rem;
   padding-left: 0.05rem;
   overflow: hidden;
   max-height: 400px;
-  transition: max-height 0.3s ease, margin-bottom 0.3s ease, opacity 0.25s ease;
+  transition: max-height 0.3s ease, margin 0.3s ease, opacity 0.25s ease;
   opacity: 1;
 }
 
 .category-filters.is-collapsed {
   max-height: 0;
+  margin-top: 0;
   margin-bottom: 0;
   opacity: 0;
 }
@@ -276,7 +276,7 @@ button {
   width: 100%;
   height: 260px;
   object-fit: contain;
-  align-items: left;
+  object-position: left center;
   transition: opacity 0.22s ease;
 }
 
@@ -316,17 +316,19 @@ button {
 
 .carousel-btn {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 0;
+  bottom: 0;
+  width: 50%;
   background: none;
   border: none;
   color: var(--color-text);
   font-size: 1.2rem;
-  padding: 0.6rem 0.75rem;
-  line-height: 1;
   opacity: 0.45;
   transition: opacity 0.2s;
   font-family: var(--font-body);
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
 }
 
 .carousel-btn:hover {
@@ -335,10 +337,12 @@ button {
 
 .carousel-btn.prev {
   left: 0;
+  justify-content: flex-start;
 }
 
 .carousel-btn.next {
   right: 0;
+  justify-content: flex-end;
 }
 
 .carousel-thumbs {
@@ -428,6 +432,92 @@ button {
   line-height: 1.75;
   color: var(--color-text);
   max-width: 440px;
+}
+
+/* ============================================================
+   CONTACT FORM (about page)
+   ============================================================ */
+
+.contact-form {
+  margin-top: 2.5rem;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-field label {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: lowercase;
+  color: var(--color-text);
+  opacity: 0.55;
+}
+
+.form-field input,
+.form-field textarea {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-text);
+  padding: 0.3rem 0;
+  outline: none;
+  width: 100%;
+  opacity: 0.85;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  opacity: 1;
+}
+
+.form-field textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.form-submit {
+  align-self: flex-start;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+  background: none;
+  border: none;
+  color: var(--color-text);
+  padding: 0;
+  cursor: pointer;
+  margin-top: 0.25rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity 0.2s;
+}
+
+.form-submit:hover {
+  opacity: 0.55;
+}
+
+.form-footer {
+  display: flex;
+  align-items: baseline;
+  gap: 1.25rem;
+}
+
+.form-confirm {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--color-text);
+  opacity: 0.55;
 }
 
 /* ============================================================

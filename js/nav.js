@@ -1,6 +1,7 @@
 /* =============================================================
    ROOM TONE — nav.js
-   SHOP accordion toggle (desktop sidebar + mobile dropdown).
+   Category visibility: always visible on shop/product (desktop),
+   always hidden on about/contact (desktop), toggle on mobile.
    ============================================================= */
 
 (function () {
@@ -13,23 +14,22 @@
                    window.location.pathname.endsWith('product.html');
   var isMobile = window.innerWidth <= 768;
 
-  // Always collapse on mobile; collapse on non-shop pages on desktop
-  if (isMobile || !onShopPage) {
+  if (isMobile) {
+    // Mobile: always start collapsed, toggle on SHOP click
     categoryFilters.classList.add('is-collapsed');
-  }
-
-  // Toggle on SHOP click
-  shopLink.addEventListener('click', function (e) {
-    if (onShopPage) {
-      e.preventDefault();
-    }
-    categoryFilters.classList.toggle('is-collapsed');
-  });
-
-  // Close dropdown when any category filter is clicked
-  categoryFilters.querySelectorAll('.cat-filter').forEach(function (link) {
-    link.addEventListener('click', function () {
-      categoryFilters.classList.add('is-collapsed');
+    shopLink.addEventListener('click', function (e) {
+      if (onShopPage) e.preventDefault();
+      categoryFilters.classList.toggle('is-collapsed');
     });
-  });
+    categoryFilters.querySelectorAll('.cat-filter').forEach(function (link) {
+      link.addEventListener('click', function () {
+        categoryFilters.classList.add('is-collapsed');
+      });
+    });
+  } else {
+    // Desktop: no toggle — show only on shop/product pages
+    if (!onShopPage) {
+      categoryFilters.classList.add('is-collapsed');
+    }
+  }
 })();
