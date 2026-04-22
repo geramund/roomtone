@@ -76,9 +76,9 @@
             a.dataset.category = product.type;
 
             var img = document.createElement('img');
+            img.src = product.thumbnail;
             img.alt = product.name;
             img.className = 'product-img';
-            RoomToneSheets.tryImage(img, product.thumbnail);
 
             var info = document.createElement('p');
             info.className = 'product-info';

@@ -28,24 +28,6 @@ var RoomToneSheets = (function () {
     return String(p).split('/').map(encodeURIComponent).join('/');
   }
 
-  /*
-   * tryImage(imgEl, basePath)
-   * Attempts to load basePath.webp → .jpg → .jpeg → .png in order,
-   * stopping at the first extension that loads successfully.
-   * basePath should already be URL-encoded (e.g. "Items/Lounge%20Chair").
-   */
-  var EXTS = ['webp', 'jpg', 'jpeg', 'png'];
-
-  function tryImage(imgEl, basePath) {
-    var idx = 0;
-    function next() {
-      if (idx >= EXTS.length) return; /* all extensions failed */
-      imgEl.src = basePath + '.' + EXTS[idx++];
-    }
-    imgEl.onerror = next;
-    next();
-  }
-
   /* Map spreadsheet column labels (lowercase) to internal keys */
   var LABEL_MAP = {
     'item name':        'name',
@@ -105,11 +87,13 @@ var RoomToneSheets = (function () {
       /* Base path for the thumbnail: Items/{ITEM NAME} (no extension)
          File on disk should be: Items/{ITEM NAME}.png  (or .jpg / .webp)
          The folder name and file name must match the ITEM NAME in the sheet exactly. */
-      var base     = encodePath('Items/' + name);
-      /* Carousel images live in Items/{ITEM NAME}/1.ext … N.ext */
-      var images   = [];
+      var base   = encodePath('Items/' + name);
+      /* Thumbnail: Items/{ITEM NAME}/{ITEM NAME}.png
+         Carousel:  Items/{ITEM NAME}/{ITEM NAME}1.webp … N.webp */
+      var thumbnail = base + '/' + encodePath(name) + '.png';
+      var images    = [];
       for (var n = 1; n <= imageCount; n++) {
-        images.push(base + '/' + n); /* e.g. "Items/Lounge%20Chair/1" */
+        images.push(base + '/' + encodePath(name + n) + '.webp');
       }
 
       products.push({
@@ -121,8 +105,8 @@ var RoomToneSheets = (function () {
         dimensions:  String(cellVal('dimensions')).trim(),
         condition:   String(cellVal('condition')).trim(),
         imageCount:  imageCount,
-        thumbnail:   base,   /* base path for the shop-grid thumbnail, no extension */
-        images:      images  /* base paths for carousel frames, no extension */
+        thumbnail:   thumbnail,
+        images:      images
       });
     });
 
@@ -151,9 +135,8 @@ var RoomToneSheets = (function () {
   }
 
   return {
-    fetchProducts:       fetchProducts,
-    fetchProductBySlug:  fetchProductBySlug,
-    tryImage:            tryImage
+    fetchProducts:      fetchProducts,
+    fetchProductBySlug: fetchProductBySlug
   };
 
 })();

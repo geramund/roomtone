@@ -50,6 +50,16 @@
           .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
       }
 
+      function loadImg(imgEl, src) {
+        imgEl.src = src;
+        if (src.slice(-5) === '.webp') {
+          imgEl.onerror = function () {
+            this.onerror = null;
+            this.src = src.slice(0, -5) + '.jpg';
+          };
+        }
+      }
+
       var params = new URLSearchParams(window.location.search);
       var slug   = params.get('item');
       if (!slug) { window.location.href = 'shop.html'; return; }
@@ -69,7 +79,7 @@
              If there are no carousel images, fall back to showing the thumbnail. */
           var hasCarousel = product.images.length > 0;
           var hasMultiple = product.images.length > 1;
-          var firstBase   = hasCarousel ? product.images[0] : product.thumbnail;
+          var firstSrc    = hasCarousel ? product.images[0] : product.thumbnail;
           main.innerHTML  = '';
 
           /* ---- article ---- */
@@ -86,8 +96,8 @@
           var mainImg = document.createElement('img');
           mainImg.id = 'carousel-main';
           mainImg.alt = product.name;
+          loadImg(mainImg, firstSrc);
           mainImg.className = 'carousel-main';
-          RoomToneSheets.tryImage(mainImg, firstBase);
           wrapper.appendChild(mainImg);
 
           if (hasMultiple) {
@@ -111,11 +121,11 @@
           if (hasMultiple) {
             var thumbsDiv = document.createElement('div');
             thumbsDiv.className = 'carousel-thumbs';
-            product.images.forEach(function (base, i) {
+            product.images.forEach(function (src, i) {
               var thumb = document.createElement('img');
               thumb.alt = product.name + ' view ' + (i + 1);
+              loadImg(thumb, src);
               thumb.className = 'carousel-thumb' + (i === 0 ? ' active' : '');
-              RoomToneSheets.tryImage(thumb, base);
               thumbsDiv.appendChild(thumb);
             });
             imagesCol.appendChild(thumbsDiv);
@@ -140,14 +150,18 @@
             if (!s.value) return;
             var div   = document.createElement('div');
             div.className = 'product-section';
-            var lbl   = document.createElement('p');
+            var lbl = document.createElement('p');
             lbl.className = 'product-section-label';
             lbl.textContent = s.label;
-            var txt   = document.createElement('p');
-            txt.className = 'product-section-text';
-            txt.textContent = s.value;
             div.appendChild(lbl);
-            div.appendChild(txt);
+            s.value.split('//').forEach(function (part) {
+              part = part.trim();
+              if (!part) return;
+              var txt = document.createElement('p');
+              txt.className = 'product-section-text';
+              txt.textContent = part;
+              div.appendChild(txt);
+            });
             infoCol.appendChild(div);
           });
 
@@ -167,7 +181,7 @@
 
             function goTo(idx) {
               current = (idx + images.length) % images.length;
-              RoomToneSheets.tryImage(mainImg, images[current]);
+              loadImg(mainImg, images[current]);
               thumbEls.forEach(function (t, i) {
                 t.classList.toggle('active', i === current);
               });
