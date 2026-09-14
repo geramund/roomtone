@@ -28,6 +28,46 @@ var RoomToneSheets = (function () {
     return String(p).split('/').map(encodeURIComponent).join('/');
   }
 
+  /* Canonical category (the ?cat= value in shop.html) -> folder under Items/.
+     Most are identical; only "art" differs from its folder name. */
+  var CATEGORY_FOLDERS = {
+    'tables':   'tables',
+    'seating':  'seating',
+    'lighting': 'lighting',
+    'storage':  'storage',
+    'textiles': 'textiles',
+    'art':      'art + mirrors',
+    'objects':  'objects'
+  };
+
+  /* Tolerate the ways a TYPE cell might be written in the sheet */
+  var TYPE_ALIASES = {
+    'art + mirrors': 'art',
+    'art and mirrors': 'art',
+    'art & mirrors': 'art',
+    'mirrors': 'art',
+    'table': 'tables',
+    'light': 'lighting',
+    'lights': 'lighting',
+    'textile': 'textiles',
+    'object': 'objects'
+  };
+
+  /* Normalize a raw TYPE cell to a canonical category key */
+  function normalizeType(raw) {
+    var t = String(raw).toLowerCase().trim().replace(/\s+/g, ' ');
+    if (TYPE_ALIASES[t]) return TYPE_ALIASES[t];
+    return t;
+  }
+
+  /* Folder that holds an item's images: Items/{CATEGORY}/{ITEM NAME}/
+     Falls back to the flat Items/{ITEM NAME}/ when the type is blank or unknown. */
+  function itemFolder(type, name) {
+    var folder = CATEGORY_FOLDERS[type];
+    if (!folder) return 'Items/' + name;
+    return 'Items/' + folder + '/' + name;
+  }
+
   /* Map spreadsheet column labels (lowercase) to internal keys */
   var LABEL_MAP = {
     'item name':        'name',
@@ -84,12 +124,14 @@ var RoomToneSheets = (function () {
         : parseInt(String(rawCount), 10) || 0;
 
       var slug     = slugify(name);
-      /* Base path for the thumbnail: Items/{ITEM NAME} (no extension)
-         File on disk should be: Items/{ITEM NAME}.png  (or .jpg / .webp)
-         The folder name and file name must match the ITEM NAME in the sheet exactly. */
-      var base   = encodePath('Items/' + name);
-      /* Thumbnail: Items/{ITEM NAME}/{ITEM NAME}.png
-         Carousel:  Items/{ITEM NAME}/{ITEM NAME}1.webp … N.webp
+      var type     = normalizeType(cellVal('type'));
+      /* Images live in Items/{CATEGORY}/{ITEM NAME}/, where CATEGORY comes from the
+         TYPE column in the sheet. Both the category folder and the item folder/file
+         names must match the sheet exactly (see CATEGORY_FOLDERS for the one
+         category whose folder name differs from its ?cat= value). */
+      var base   = encodePath(itemFolder(type, name));
+      /* Thumbnail: Items/{CATEGORY}/{ITEM NAME}/{ITEM NAME}.png
+         Carousel:  Items/{CATEGORY}/{ITEM NAME}/{ITEM NAME}1.webp … N.webp
          (falls back to .png, then .jpg, per-image if the .webp is missing — see loadImg in product.html) */
       var thumbnail = base + '/' + encodePath(name) + '.png';
       var images    = [];
@@ -101,7 +143,7 @@ var RoomToneSheets = (function () {
         name:        name,
         slug:        slug,
         price:       price,
-        type:        String(cellVal('type')).toLowerCase().trim(),
+        type:        type,
         description: String(cellVal('description')).trim(),
         dimensions:  String(cellVal('dimensions')).trim(),
         condition:   String(cellVal('condition')).trim(),
