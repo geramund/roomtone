@@ -53,9 +53,15 @@
       function loadImg(imgEl, src) {
         imgEl.src = src;
         if (src.slice(-5) === '.webp') {
+          var base = src.slice(0, -5);
+          var fallbacks = ['.png', '.jpg'];
+          var i = 0;
           imgEl.onerror = function () {
-            this.onerror = null;
-            this.src = src.slice(0, -5) + '.jpg';
+            if (i < fallbacks.length) {
+              this.src = base + fallbacks[i++];
+            } else {
+              this.onerror = null;
+            }
           };
         }
       }

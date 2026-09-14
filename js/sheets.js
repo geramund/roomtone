@@ -89,7 +89,8 @@ var RoomToneSheets = (function () {
          The folder name and file name must match the ITEM NAME in the sheet exactly. */
       var base   = encodePath('Items/' + name);
       /* Thumbnail: Items/{ITEM NAME}/{ITEM NAME}.png
-         Carousel:  Items/{ITEM NAME}/{ITEM NAME}1.webp … N.webp */
+         Carousel:  Items/{ITEM NAME}/{ITEM NAME}1.webp … N.webp
+         (falls back to .png, then .jpg, per-image if the .webp is missing — see loadImg in product.html) */
       var thumbnail = base + '/' + encodePath(name) + '.png';
       var images    = [];
       for (var n = 1; n <= imageCount; n++) {
